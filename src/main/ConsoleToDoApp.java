@@ -1,4 +1,6 @@
 import model.*;
+import utility.JsonFileIO;
+
 import java.util.*;
 
 // A simple "To Do" app
@@ -7,11 +9,12 @@ public class ConsoleToDoApp {
     private static Scanner input;
     private static String userInput;
     private static boolean exit = false;
-    
+
     public static void main(String[] args) {
         input = new Scanner(System.in);
-        todo = new ArrayList<>();
-        
+//        todo = new ArrayList<>();
+        todo = JsonFileIO.read();
+
         printLogo();
         while (!exit) {
             displayToDos();
@@ -19,37 +22,44 @@ public class ConsoleToDoApp {
             takeActionBasedOnInput();
         }
     }
-    
+
     private static void takeActionBasedOnInput() {
         switch (userInput.toUpperCase().charAt(0)) {
-            case 'A': addNewTask();
+            case 'A':
+                addNewTask();
                 break;
-            case 'D': displayTaskDetails();
+            case 'D':
+                displayTaskDetails();
                 break;
-            case 'Q': exit = true;
+            case 'Q':
+                exit = true;
                 break;
-            default: System.out.println("Invalid input!");
+            default:
+                System.out.println("Invalid input!");
         }
     }
-    
+
     private static void displayTaskDetails() {
-        for (Task task: todo) {
+        for (Task task : todo) {
             System.out.println(task);
         }
         pressEnterToContinue();
     }
-    
+
     private static void pressEnterToContinue() {
         System.out.print("\nPress enter to continue ... ");
         input.nextLine();
     }
-    
+
     private static void addNewTask() {
         if (getDescriptionForTask()) {
             todo.add(new Task(userInput));
+            //todo save into json
+            JsonFileIO.write(todo);
         }
+
     }
-    
+
     private static boolean getDescriptionForTask() {
         System.out.println("Enter task description:");
         System.out.print("> ");
@@ -60,7 +70,7 @@ public class ConsoleToDoApp {
         }
         return true;
     }
-    
+
     private static void printLogo() {
         String cat = ""
                 + "     \\\n"
@@ -77,10 +87,10 @@ public class ConsoleToDoApp {
                 + "  CPSC 210  //_// ___/\n"
                 + "                \\_)"
                 + "";
-        
+
         System.out.println(cat);
     }
-    
+
     private static void displayToDos() {
         System.out.println("\n");
         System.out.println("==============================");
@@ -89,7 +99,7 @@ public class ConsoleToDoApp {
         displayPendingTasks();
         displayMenu();
     }
-    
+
     private static void displayMenu() {
         System.out.println("You can ...");
         System.out.println("\tEnter A to add a new task;");
@@ -97,7 +107,7 @@ public class ConsoleToDoApp {
         System.out.println("\tEnter Q to quit.");
         System.out.print("> ");
     }
-    
+
     private static void displayPendingTasks() {
         if (todo.isEmpty()) {
             System.out.println("Wow! you have no pending tasks.");
@@ -106,7 +116,7 @@ public class ConsoleToDoApp {
         }
         System.out.println("------------------------------");
     }
-    
+
     private static void displayTasks(List<Task> tasks) {
         for (int i = 0; i < tasks.size(); i++) {
             System.out.printf("%3d. %s\n", i + 1, tasks.get(i).getDescription());
