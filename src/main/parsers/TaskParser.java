@@ -120,7 +120,6 @@ public class TaskParser {
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, (Integer) dueDateJson.get("year"));
-        //todo 修改了-1
         cal.set(Calendar.MONTH, (Integer) dueDateJson.get("month"));
         cal.set(Calendar.DATE, (Integer) dueDateJson.get("day"));
         cal.set(Calendar.HOUR_OF_DAY, (Integer) dueDateJson.get("hour"));

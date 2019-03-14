@@ -15,30 +15,32 @@ public class PomoTodoApp extends Application {
     public static final String TITLE = "PomoTODO";
     public static final double WIDTH = 520;
     public static final double HEIGHT = 800;
-    private static List<Task> tasks = new ArrayList<>();
+    // TODO: initialize tasks list
+    // private static List<Task> tasks = new ArrayList<>();
+    private static List<Task> tasks = JsonFileIO.read();
     private static Stage primaryStage;
-    
+
     public static void main(String[] args) {
         launch(args);
     }
-    
+
     // EFFECTS: returns the primary Stage
     public static Stage getPrimaryStage() {
         return primaryStage;
     }
-    
+
     // REQUIRES: stage != null
     // MODIFIES: this
     // EFFECTS: sets the primary stage
     private static void setPrimaryStage(Stage stage) {
         primaryStage = stage;
     }
-    
+
     // EFFECTS: returns the list of tasks in this PomoTODO APP
     public static List<Task> getTasks() {
         return tasks;
     }
-    
+
     // REQUIRES: primaryStage != null AND root != null
     public static void setScene(Parent root) {
         try {
@@ -50,7 +52,7 @@ public class PomoTodoApp extends Application {
             System.out.println("Failed to load new Scene!");
         }
     }
-    
+
     // EFFECTS: Application starts here!
     @Override
     public void start(Stage primaryStage) throws Exception {
