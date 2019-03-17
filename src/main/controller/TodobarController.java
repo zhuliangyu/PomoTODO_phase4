@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.controls.JFXRippler;
+import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +13,11 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import model.Task;
+import ui.EditTask;
+import ui.EditTaskDemo;
+import ui.ListView;
+import ui.PomoTodoApp;
+import utility.JsonFileIO;
 import utility.Logger;
 
 import java.io.File;
@@ -141,11 +147,11 @@ public class TodobarController implements Initializable {
                 case 3:
                     Logger.log("TodobarOptionsPopUpController", "done");
                     break;
-                case 4:
-                    Logger.log("TodobarOptionsPopUpController", "pomodoro");
-                    break;
+//                case 4:
+//                    Logger.log("TodobarOptionsPopUpController", "pomodoro");
+//                    break;
                 default:
-                    Logger.log("TodobarOptionsPopUpController", "No action is implemented for the selected option");
+                    Logger.log("TodobarOptionsPopUpController", "pomodoro");
             }
             todobarPopUp.hide();
         }
@@ -162,9 +168,25 @@ public class TodobarController implements Initializable {
             switch (selectedIndex) {
                 case 0:
                     Logger.log("TodobarViewOptionsPopUpController", "edit");
+
+                    // TODO: 2019-03-16
+                    PomoTodoApp.setScene(new EditTask(task));
+
+
+
                     break;
                 case 1:
                     Logger.log("TotobarViewOptionsPopUpController", "delete");
+
+                    // TODO: 2019-03-16  find task from file
+                    // delete task
+                    PomoTodoApp.getTasks().remove(task);
+                    JsonFileIO.write(PomoTodoApp.getTasks());
+
+//                    selectedIndex
+                    // TODO: refresh the ListView
+                    PomoTodoApp.setScene(new ListView(PomoTodoApp.getTasks()));
+
                     break;
 
                 default:

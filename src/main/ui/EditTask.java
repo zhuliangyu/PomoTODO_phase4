@@ -4,6 +4,7 @@ import controller.EditTaskController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.StackPane;
 import model.Task;
+import utility.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,4 +31,6 @@ public class EditTask extends StackPane {
             throw new RuntimeException(exception);
         }
     }
+
+   
 }
