@@ -1,0 +1,13 @@
+package model.exceptions;
+
+public class NegativeInputException extends IllegalArgumentException {
+    /**
+     * Constructs an <code>IllegalArgumentException</code> with the
+     * specified detail message.
+     *
+     * @param s the detail message.
+     */
+    public NegativeInputException(String s) {
+        super(s);
+    }
+}

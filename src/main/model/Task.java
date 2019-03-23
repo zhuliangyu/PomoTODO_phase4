@@ -1,6 +1,8 @@
 package model;
 
 import model.exceptions.EmptyStringException;
+import model.exceptions.InvalidProgressException;
+import model.exceptions.NegativeInputException;
 import model.exceptions.NullArgumentException;
 import parsers.Parser;
 import parsers.TagParser;
@@ -9,7 +11,7 @@ import parsers.exceptions.ParsingException;
 import java.util.*;
 
 // Represents a Task having a description, status, priorities, set of tags and due date.
-public class Task {
+public class Task extends Todo {
     public static final DueDate NO_DUE_DATE = null;
 
     private String description;
@@ -25,6 +27,9 @@ public class Task {
     //    status of 'To Do', and default priority level (i.e., not important nor urgent)
     //  throws EmptyStringException if description is null or empty
     public Task(String description) {
+        // TODO: 2019-03-22 super constructor
+        super(description);
+
         if (description == null || description.length() == 0) {
             throw new EmptyStringException("Cannot construct a task with no description");
         }
@@ -36,6 +41,30 @@ public class Task {
         setDescription(description);
     }
 
+    // MODIFIES: this
+// EFFECTS: sets the progress made towards the completion of this task
+//  throws InvalidProgressException if !(0 <= progress <= 100)
+    // TODO: 2019-03-22  
+    public void setProgress(int progress) {
+        if (progress >= 0 && progress <= 100) {
+            this.progress = progress;
+        } else {
+            throw new InvalidProgressException("setProgress exception");
+        }
+    }
+
+    // MODIFIES: this
+// EFFECTS: sets the estimated time to complete this task (in hours of work)
+//  throws NegativeInputException if hours < 0
+    // TODO: 2019-03-22
+    public void setEstimatedTimeToComplete(int hours) {
+        if (hours >= 0) {
+            this.etcHours = hours;
+        } else {
+            throw new NegativeInputException("setEstimatedTimeToComplete exception");
+        }
+
+    }
 
     // MODIFIES: this
     // EFFECTS: creates a tag with name tagName and adds it to this task
@@ -44,7 +73,7 @@ public class Task {
     public void addTag(String tagName) {
         addTag(new Tag(tagName));
     }
-    
+
     // MODIFIES: this
     // EFFECTS: adds tag to this task if it is not already exist
     //  throws NullArgumentException if tag is null
@@ -54,14 +83,14 @@ public class Task {
             tag.addTask(this);
         }
     }
-    
+
     // MODIFIES: this
     // EFFECTS: removes the tag with name tagName from this task
     //  throws EmptyStringException if tagName is empty or null
     public void removeTag(String tagName) {
         removeTag(new Tag(tagName));
     }
-    
+
     // MODIFIES: this
     // EFFECTS: removes tag from this task
     //  throws NullArgumentException if tag is null
@@ -71,7 +100,7 @@ public class Task {
             tag.removeTask(this);
         }
     }
-    
+
     // EFFECTS: returns an unmodifiable set of tags
     public Set<Tag> getTags() {
         return Collections.unmodifiableSet(tags);
@@ -112,6 +141,20 @@ public class Task {
         return description;
     }
 
+    @Override
+    // TODO: 2019-03-22 task estimate time to complete
+    public int getEstimatedTimeToComplete() {
+        return this.etcHours;
+    }
+
+    @Override
+    // TODO: 2019-03-22 task get progress
+    public int getProgress() {
+        return this.progress;
+    }
+
+
+
     // MODIFIES: this
     // EFFECTS:  sets the description of this task
     //     parses the description to extract meta-data (i.e., tags, status, priority and deadline).
@@ -144,7 +187,7 @@ public class Task {
         }
         return containsTag(new Tag(tagName));
     }
-    
+
     // EFFECTS: returns true if task contains this tag,
     //     returns false otherwise
     //  throws NullArgumentException if tag is null
@@ -188,7 +231,7 @@ public class Task {
         output.append("\n\tTags: " + tagsToString(new ArrayList<Tag>(getTags())));
         output.append("\n}");
         return output.toString();
-    
+
     }
 
     // EFFECTS: returns a string containing a comma-separated list of tags,
@@ -205,7 +248,7 @@ public class Task {
         }
         return output.toString();
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -221,7 +264,7 @@ public class Task {
                 && Objects.equals(priority, task.priority)
                 && status == task.status;
     }
-    
+
     @Override
     public int hashCode() {
         // return Objects.hash(description, tags, dueDate, priority, status);
