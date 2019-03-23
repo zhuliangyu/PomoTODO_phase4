@@ -49,7 +49,7 @@ public class Task extends Todo {
         if (progress >= 0 && progress <= 100) {
             this.progress = progress;
         } else {
-            throw new InvalidProgressException("setProgress exception");
+            throw new InvalidProgressException();
         }
     }
 
@@ -61,7 +61,7 @@ public class Task extends Todo {
         if (hours >= 0) {
             this.etcHours = hours;
         } else {
-            throw new NegativeInputException("setEstimatedTimeToComplete exception");
+            throw new NegativeInputException();
         }
 
     }

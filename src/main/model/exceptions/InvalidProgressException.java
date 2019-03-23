@@ -7,7 +7,10 @@ public class InvalidProgressException extends IllegalArgumentException {
      *
      * @param s the detail message.
      */
-    public InvalidProgressException(String s) {
-        super(s);
+    /**
+     * Constructs an <code>IllegalArgumentException</code> with no
+     * detail message.
+     */
+    public InvalidProgressException() {
     }
 }

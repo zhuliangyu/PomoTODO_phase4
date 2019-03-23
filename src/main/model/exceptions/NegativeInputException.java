@@ -7,7 +7,10 @@ public class NegativeInputException extends IllegalArgumentException {
      *
      * @param s the detail message.
      */
-    public NegativeInputException(String s) {
-        super(s);
+    /**
+     * Constructs an <code>IllegalArgumentException</code> with no
+     * detail message.
+     */
+    public NegativeInputException() {
     }
 }
