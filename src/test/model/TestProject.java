@@ -101,6 +101,46 @@ public class TestProject {
 
     }
 
+
+    @Test
+    public void testProjectIterator() {
+        Task task1 = new Task("test1##123");
+        task1.setPriority(new Priority(1));
+
+        Task task2 = new Task("test2##123");
+        task2.setPriority(new Priority(2));
+
+        Task task3 = new Task("test3##123");
+        task3.setPriority(new Priority(2));
+
+        Task task4 = new Task("test4##123");
+        task4.setPriority(new Priority(1));
+
+        Task task5 = new Task("test5##123");
+        task5.setPriority(new Priority(4));
+
+
+        project1 = new Project("project1");
+
+        project2 = new Project("project2");
+        project2.setPriority(new Priority(1));
+
+        Project project3 = new Project("project3");
+
+        project1.add(task1);
+        project1.add(task2);
+        project1.add(task3);
+        project1.add(task4);
+        project1.add(project2);
+        project1.add(project3);
+        project1.add(task5);
+
+        for (Todo todo : project1) {
+            System.out.println(todo);
+        }
+
+    }
+
 //    @Test
 //    public void testConstrorZero() {
 //        // TODO: 2019-03-22 project has no task

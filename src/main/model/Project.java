@@ -3,14 +3,11 @@ package model;
 import model.exceptions.EmptyStringException;
 import model.exceptions.NullArgumentException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 // Represents a Project, a collection of zero or more Tasks
 // Class Invariant: no duplicated task; order of tasks is preserved
-public class Project extends Todo {
+public class Project extends Todo implements Iterable<Todo> {
     private String description;
 
     private List<Todo> tasks;
@@ -104,6 +101,16 @@ public class Project extends Todo {
 
     }
 
+    // TODO: 2019-03-22
+    @Override
+    public Priority getPriority() {
+        return this.priority;
+    }
+
+    public Priority setPriority(Priority p) {
+        return this.priority = p;
+    }
+
 
     // EFFECTS: returns an integer between 0 and 100 which represents
     //     the percentage of completion (rounded down to the closest integer).
@@ -157,5 +164,92 @@ public class Project extends Todo {
     @Override
     public int hashCode() {
         return Objects.hash(description);
+    }
+
+//    @Override
+//    public String toString() {
+//        return "Project{" + "description='" + description + '\'' + ", priority=" + priority + '}';
+//    }
+
+    /**
+     * Returns an iterator over elements of type {@code T}.
+     *
+     * @return an Iterator.
+     */
+    @Override
+    public Iterator<Todo> iterator() {
+        return new ProjectIterator();
+    }
+
+    private class ProjectIterator implements Iterator<Todo> {
+        /**
+         * Returns {@code true} if the iteration has more elements.
+         * (In other words, returns {@code true} if {@link #next} would
+         * return an element rather than throwing an exception.)
+         *
+         * @return {@code true} if the iteration has more elements
+         */
+
+
+        int index = 0;
+
+        @Override
+        public boolean hasNext() {
+            return index < tasks.size();
+        }
+
+        /**
+         * Returns the next element in the iteration.
+         *
+         * @return the next element in the iteration
+         * @throws NoSuchElementException if the iteration has no more elements
+         */
+        @Override
+        public Todo next() {
+
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+
+            List<Integer> afterSorted = sorted();
+
+            //output current index of afterSorted list
+            int currentIndex = index;
+
+            //move index to the right
+            index = index + 1;
+            return tasks.get(afterSorted.get(currentIndex));
+
+
+        }
+
+        private List<Integer> sorted() {
+            List<Integer> listall = new ArrayList<>();
+
+            for (int i = 1; i < 5; i++) {
+                // i = priority number, from 1 to 4
+                for (Integer ele : pickPriority(i)) {
+                    // pick the specific priority index number
+                    // add those into a new big list
+                    listall.add(ele);
+                }
+            }
+
+            //sorted index of list
+            return listall;
+        }
+
+        // Effect: pick all priority of index and save it to a new list
+        // according to its order
+        private List<Integer> pickPriority(int priorityNumber) {
+            List<Integer> list = new ArrayList<>();
+            for (int i = 0; i < tasks.size(); i++) {
+                if (tasks.get(i).getPriority().equals(new Priority(priorityNumber))) {
+                    list.add(i);
+                }
+            }
+            return list;
+        }
+
     }
 }

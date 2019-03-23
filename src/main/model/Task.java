@@ -17,7 +17,7 @@ public class Task extends Todo {
     private String description;
     private Set<Tag> tags;
     private DueDate dueDate;
-    private Priority priority;
+//    private Priority priority;
     private Status status;
 
     // MODIFIES: this
@@ -36,7 +36,6 @@ public class Task extends Todo {
         this.description = description;
         tags = new HashSet<>();
         dueDate = NO_DUE_DATE;
-        priority = new Priority(4);
         status = Status.TODO;
         setDescription(description);
     }

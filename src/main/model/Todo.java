@@ -2,10 +2,14 @@ package model;
 
 import model.exceptions.EmptyStringException;
 
+import java.util.List;
+
 public abstract class Todo {
     protected String description;
     protected int progress;
     protected int etcHours;  // Estimated Time To Complete
+    protected Priority priority;
+
 
     // MODIFIES: this
     // EFFECTS: sets the "description" using the given description
@@ -25,6 +29,8 @@ public abstract class Todo {
         //sets "progress" and "estimated time to complete" to zero
         progress = 0;
         etcHours = 0;
+        this.priority = new Priority(4);
+
     }
 
     // EFFECTS: returns the description
@@ -40,5 +46,8 @@ public abstract class Todo {
     // EFFECTS: returns an integer between 0 and 100 which represents
     //     the percentage of completion (rounded down to the closest integer).
     public abstract int getProgress();
+
+    public abstract Priority getPriority();
+
 
 }
