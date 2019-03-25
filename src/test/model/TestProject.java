@@ -141,34 +141,132 @@ public class TestProject {
 
     }
 
-//    @Test
-//    public void testConstrorZero() {
-//        // TODO: 2019-03-22 project has no task
-//        try {
-//            project = new Project("test##123");
-//        } catch (EmptyStringException e) {
-//            fail("It shouldn't throw exception.");
-//        }
-//        assertEquals(0, project.getEstimatedTimeToComplete());
-//        assertEquals(0, project.getProgress());
-//    }
-//    @Test
-//    public void testConstructorWithoutException() {
-//        try {
-//            project = new Project("test");
-//        } catch (EmptyStringException e) {
-//            fail("It shouldn't throw exception.");
-//        }
-//        assertEquals("test", project.getDescription());
-//        assertEquals(0, project.getTasks().size());
-//    }
-//
+    @Test
+    public void testConstrorZero() {
+        // TODO: 2019-03-22 project has no task
+        try {
+            project = new Project("test##123");
+        } catch (EmptyStringException e) {
+            fail("It shouldn't throw exception.");
+        }
+        assertEquals(0, project.getEstimatedTimeToComplete());
+        assertEquals(0, project.getProgress());
+    }
+
+
+    @Test
+    public void testEmptyStringException() {
+        try {
+            project = new Project(null);
+            fail();
+        } catch (EmptyStringException e) {
+        }
+        try {
+            project = new Project("");
+            fail();
+        } catch (EmptyStringException e) {
+        }
+    }
+
+    @Test
+    public void testUnsupportedOperationException() {
+        try {
+            project = new Project("asd##123 ");
+            project.getTasks();
+            fail();
+        } catch (UnsupportedOperationException e) {
+        }
+    }
+
+    @Test
+    public void testRemove() {
+        Task task1 = new Task("test1##123");
+        Task task2 = new Task("test2##123");
+        Task task3 = new Task("test3##123");
+        Task task4 = new Task("test4##123");
+
+        project1 = new Project("project1");
+
+        project1.add(task1);
+        project1.add(task2);
+        project1.add(task3);
+        assertEquals(0, project1.getProgress());
+
+        task1.setProgress(100);
+        assertEquals(33, project1.getProgress());
+
+        task2.setProgress(50);
+        task3.setProgress(25);
+
+        assertEquals(58, project1.getProgress());
+
+        project2 = new Project("project2");
+        project2.add(task4);
+        project2.add(project1);
+        assertEquals(29, project2.getProgress());
+        project2.remove(project1);
+        assertEquals(false, project2.contains(project1));
+        assertEquals("project2", project2.getDescription());
+
+
+    }
+
+    @Test
+    public void testisCompleted(){
+        Task task1 = new Task("test1##123");
+        Task task2 = new Task("test2##123");
+        Task task3 = new Task("test3##123");
+        Task task4 = new Task("test4##123");
+
+        project1 = new Project("project1");
+
+        project1.add(task1);
+        project1.add(task2);
+        project1.add(task3);
+
+        assertEquals(false, project1.isCompleted());
+
+        task1.setProgress(30);
+        assertEquals(false, project1.isCompleted());
+
+        Project project2 = new Project("project2");
+        assertEquals(false, project2.isCompleted());
+
+        project2.add(task4);
+        task4.setProgress(100);
+        assertEquals(true, project2.isCompleted());
+
+
+    }
+
+    @Test
+    public void testContains(){
+        Task task1 = new Task("test1##123");
+        Task task2 = new Task("test2##123");
+        Task task3 = new Task("test3##123");
+        Task task4 = new Task("test4##123");
+
+        project1 = new Project("project1");
+
+        project1.add(task1);
+        project1.add(task2);
+        project1.add(task3);
+        assertEquals(true, project1.contains(task1));
+
+        try {
+            project1.contains(null);
+            fail();
+        } catch (NullArgumentException e) {
+        }
+
+    }
+
 //    @Test
 //    public void testConstructorWithException() {
 //        try {
 //            project = new Project("");
 //            fail("It didn't throw exception.");
-//        } catch (EmptyStringException e) {
+//        } catch (EmptyStringException e) {"
 //        }
 //
 //        try {
