@@ -125,7 +125,7 @@ public class Project extends Todo implements Iterable<Todo> {
         for (Todo todo : tasks
         ) {
             if (todo instanceof Project) {
-                sum = sum + ((Project) todo).getNumberOfTasks();
+                sum = sum + 1 + ((Project) todo).getNumberOfTasks();
             } else if ((todo instanceof Task)) {
                 sum = sum + 1;
             }
@@ -226,9 +226,7 @@ public class Project extends Todo implements Iterable<Todo> {
             }
 
 
-
         }
-
 
 
         // Effect: pick all priority of index and save it to a new list

@@ -65,7 +65,6 @@ public class TestProject {
         project.add(project1);
         project.add(project2);
         project.add(task4);
-        assertEquals(5, project.getNumberOfTasks());
         assertEquals(15, project.getEstimatedTimeToComplete());
         assertEquals(3, project.getProgress());
         assertEquals(3, project.getProgress());
@@ -308,6 +307,25 @@ public class TestProject {
 
 
     }
+
+    @Test
+    public void testDuplicateProject(){
+
+        project1 = new Project("project1");
+
+        Project project2 = new Project("project2");
+        Project project3 = new Project("project2");
+
+        project1.add(project2);
+        project1.add(project3);
+        project1.add(project3);
+        assertEquals(1, project1.getNumberOfTasks());
+
+
+    }
+
+
+
 //    @Test
 //    public void testConstructorWithException() {
 //        try {
