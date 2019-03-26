@@ -261,6 +261,53 @@ public class TestProject {
 
     }
 
+    @Test
+    public void testAdditself(){
+        Task task1 = new Task("test1##123");
+        Task task2 = new Task("test2##123");
+        Task task3 = new Task("test3##123");
+        Task task4 = new Task("test4##123");
+
+        project1 = new Project("project1");
+
+        project1.add(task1);
+        project1.add(task2);
+        project1.add(task3);
+
+        assertEquals(false, project1.isCompleted());
+
+        task1.setProgress(30);
+        assertEquals(false, project1.isCompleted());
+
+        Project project2 = new Project("project2");
+        assertEquals(false, project2.isCompleted());
+
+        project2.add(task4);
+        task4.setProgress(100);
+        assertEquals(true, project2.isCompleted());
+
+        project2.add(project2);
+        assertEquals(false, project2.contains(project2));
+
+
+
+
+    }
+
+    @Test
+    public void testAddSubSingle(){
+
+        project1 = new Project("project1");
+
+        Project project2 = new Project("project2");
+
+        project2.add(project1);
+        project2.add(project2);
+        assertEquals(false, project2.contains(project2));
+        assertEquals(true, project2.contains(project1));
+
+
+    }
 //    @Test
 //    public void testConstructorWithException() {
 //        try {

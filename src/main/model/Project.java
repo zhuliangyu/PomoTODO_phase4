@@ -32,7 +32,7 @@ public class Project extends Todo implements Iterable<Todo> {
     // EFFECTS: task is added to this project (if it was not already part of it)
     //   throws NullArgumentException when task is null
     public void add(Todo task) {
-        if (!contains(task)) {
+        if (!contains(task) && task != this) {
             tasks.add(task);
         }
     }
@@ -190,12 +190,15 @@ public class Project extends Todo implements Iterable<Todo> {
          * @return {@code true} if the iteration has more elements
          */
 
+        Iterator<Todo> p1 = iteratorPriority(1);
+        Iterator<Todo> p2 = iteratorPriority(2);
+        Iterator<Todo> p3 = iteratorPriority(3);
+        Iterator<Todo> p4 = iteratorPriority(4);
 
-        int index = 0;
 
         @Override
         public boolean hasNext() {
-            return index < tasks.size();
+            return p1.hasNext() || p2.hasNext() || p3.hasNext() || p4.hasNext();
         }
 
         /**
@@ -211,44 +214,33 @@ public class Project extends Todo implements Iterable<Todo> {
                 throw new NoSuchElementException();
             }
 
-            List<Integer> afterSorted = sorted();
 
-            //output current index of afterSorted list
-            int currentIndex = index;
-
-            //move index to the right
-            index = index + 1;
-            return tasks.get(afterSorted.get(currentIndex));
-
-
-        }
-
-        private List<Integer> sorted() {
-            List<Integer> listall = new ArrayList<>();
-
-            for (int i = 1; i < 5; i++) {
-                // i = priority number, from 1 to 4
-                for (Integer ele : pickPriority(i)) {
-                    // pick the specific priority index number
-                    // add those into a new big list
-                    listall.add(ele);
-                }
+            if (p1.hasNext()) {
+                return p1.next();
+            } else if (p2.hasNext()) {
+                return p2.next();
+            } else if (p3.hasNext()) {
+                return p3.next();
+            } else {
+                return p4.next();
             }
 
-            //sorted index of list
-            return listall;
+
+
         }
+
+
 
         // Effect: pick all priority of index and save it to a new list
         // according to its order
-        private List<Integer> pickPriority(int priorityNumber) {
-            List<Integer> list = new ArrayList<>();
+        private Iterator<Todo> iteratorPriority(int priorityNumber) {
+            List<Todo> list = new ArrayList<>();
             for (int i = 0; i < tasks.size(); i++) {
                 if (tasks.get(i).getPriority().equals(new Priority(priorityNumber))) {
-                    list.add(i);
+                    list.add(tasks.get(i));
                 }
             }
-            return list;
+            return list.iterator();
         }
 
     }
