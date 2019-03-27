@@ -3,8 +3,10 @@ package model;
 import model.exceptions.EmptyStringException;
 
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
-public abstract class Todo {
+public abstract class Todo extends Observable implements Observer {
     protected String description;
     protected int progress;
     protected int etcHours;  // Estimated Time To Complete

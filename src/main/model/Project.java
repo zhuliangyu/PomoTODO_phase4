@@ -7,7 +7,7 @@ import java.util.*;
 
 // Represents a Project, a collection of zero or more Tasks
 // Class Invariant: no duplicated task; order of tasks is preserved
-public class Project extends Todo implements Iterable<Todo> {
+public class Project extends Todo implements Iterable<Todo>, Observer {
     private String description;
 
     private List<Todo> tasks;
@@ -34,7 +34,37 @@ public class Project extends Todo implements Iterable<Todo> {
     public void add(Todo task) {
         if (!contains(task) && task != this) {
             tasks.add(task);
+            task.addObserver(this);
+            this.etcHours += task.getEstimatedTimeToComplete();
+
+
+            // TODO: add observer
+
+//            task.notifyObservers();
+//
+//            this.setChanged();
+//            this.notifyObservers();
         }
+    }
+
+    /**
+     * This method is called whenever the observed object is changed. An
+     * application calls an <tt>Observable</tt> object's
+     * <code>notifyObservers</code> method to have all the object's
+     * observers notified of the change.
+     *
+     * @param o   the observable object.
+     * @param arg an argument passed to the <code>notifyObservers</code>
+     */
+    @Override
+    //todo update
+    public void update(Observable o, Object arg) {
+        int old = this.etcHours;
+        this.etcHours = etcHours + ((Todo) o).getEstimatedTimeToComplete() - (Integer) arg;
+
+        this.setChanged();
+        this.notifyObservers(old);
+
     }
 
     // MODIFIES: this
@@ -42,8 +72,9 @@ public class Project extends Todo implements Iterable<Todo> {
     //   throws NullArgumentException when task is null
     public void remove(Todo task) {
         if (contains(task)) {
+            this.etcHours = this.etcHours - task.getEstimatedTimeToComplete();
+            task.deleteObserver(this);
             tasks.remove(task);
-
         }
     }
 
@@ -57,13 +88,14 @@ public class Project extends Todo implements Iterable<Todo> {
     //todo
     public int getEstimatedTimeToComplete() {
 
-        int hours = 0;
-        for (Todo t : tasks) {
-            hours = hours + t.getEstimatedTimeToComplete();
-        }
-
-
-        return hours;
+//        int hours = 0;
+//        for (Todo t : tasks) {
+//            hours = hours + t.getEstimatedTimeToComplete();
+//        }
+//
+//
+//        return hours;
+        return etcHours;
     }
 
     // EFFECTS: returns an unmodifiable list of tasks in this project.
@@ -166,10 +198,6 @@ public class Project extends Todo implements Iterable<Todo> {
         return Objects.hash(description);
     }
 
-//    @Override
-//    public String toString() {
-//        return "Project{" + "description='" + description + '\'' + ", priority=" + priority + '}';
-//    }
 
     /**
      * Returns an iterator over elements of type {@code T}.
@@ -180,6 +208,7 @@ public class Project extends Todo implements Iterable<Todo> {
     public Iterator<Todo> iterator() {
         return new ProjectIterator();
     }
+
 
     private class ProjectIterator implements Iterator<Todo> {
         /**

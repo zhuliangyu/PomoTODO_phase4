@@ -57,8 +57,14 @@ public class Task extends Todo {
 //  throws NegativeInputException if hours < 0
     // TODO: 2019-03-22
     public void setEstimatedTimeToComplete(int hours) {
+        int old = this.etcHours;
         if (hours >= 0) {
             this.etcHours = hours;
+
+            // TODO: observ
+            this.setChanged();
+            this.notifyObservers(old);
+
         } else {
             throw new NegativeInputException();
         }
@@ -268,5 +274,19 @@ public class Task extends Todo {
     public int hashCode() {
         // return Objects.hash(description, tags, dueDate, priority, status);
         return Objects.hash(description, dueDate, priority, status);
+    }
+
+    /**
+     * This method is called whenever the observed object is changed. An
+     * application calls an <tt>Observable</tt> object's
+     * <code>notifyObservers</code> method to have all the object's
+     * observers notified of the change.
+     *
+     * @param o   the observable object.
+     * @param arg an argument passed to the <code>notifyObservers</code>
+     */
+    @Override
+    public void update(Observable o, Object arg) {
+
     }
 }

@@ -65,6 +65,7 @@ public class TestProject {
         project.add(project1);
         project.add(project2);
         project.add(task4);
+        task4.setEstimatedTimeToComplete(3);
         assertEquals(15, project.getEstimatedTimeToComplete());
         assertEquals(3, project.getProgress());
         assertEquals(3, project.getProgress());
@@ -211,7 +212,7 @@ public class TestProject {
     }
 
     @Test
-    public void testisCompleted(){
+    public void testisCompleted() {
         Task task1 = new Task("test1##123");
         Task task2 = new Task("test2##123");
         Task task3 = new Task("test3##123");
@@ -239,7 +240,7 @@ public class TestProject {
     }
 
     @Test
-    public void testContains(){
+    public void testContains() {
         Task task1 = new Task("test1##123");
         Task task2 = new Task("test2##123");
         Task task3 = new Task("test3##123");
@@ -261,7 +262,7 @@ public class TestProject {
     }
 
     @Test
-    public void testAdditself(){
+    public void testAdditself() {
         Task task1 = new Task("test1##123");
         Task task2 = new Task("test2##123");
         Task task3 = new Task("test3##123");
@@ -289,12 +290,10 @@ public class TestProject {
         assertEquals(false, project2.contains(project2));
 
 
-
-
     }
 
     @Test
-    public void testAddSubSingle(){
+    public void testAddSubSingle() {
 
         project1 = new Project("project1");
 
@@ -309,7 +308,7 @@ public class TestProject {
     }
 
     @Test
-    public void testDuplicateProject(){
+    public void testDuplicateProject() {
 
         project1 = new Project("project1");
 
@@ -325,6 +324,54 @@ public class TestProject {
     }
 
 
+    @Test
+    public void testObserver() {
+        Task task1 = new Task("test1##123");
+        task1.setEstimatedTimeToComplete(1);
+
+        Task task2 = new Task("test2##123");
+        task2.setEstimatedTimeToComplete(2);
+
+        Task task3 = new Task("test3##123");
+        task3.setEstimatedTimeToComplete(3);
+
+        Task task4 = new Task("test4##123");
+        task4.setEstimatedTimeToComplete(4);
+
+
+        project = new Project("test");
+
+        project1 = new Project("project1");
+        project1.add(task1);
+        project1.add(task3);
+        assertEquals(4, project1.getEstimatedTimeToComplete());
+
+        task3.setEstimatedTimeToComplete(9);
+        assertEquals(10, project1.getEstimatedTimeToComplete());
+
+        project.add(project1);
+        project.add(task2);
+        assertEquals(12, project.getEstimatedTimeToComplete());
+
+        task2.setEstimatedTimeToComplete(5);
+
+        assertEquals(15, project.getEstimatedTimeToComplete());
+
+        //////////////////////////////////////////////////////////////////
+
+
+
+        task1.setEstimatedTimeToComplete(2);
+        assertEquals(16, project.getEstimatedTimeToComplete());
+
+//        task3.setEstimatedTimeToComplete(3);
+
+        project.remove(task2);
+        assertEquals(11, project.getEstimatedTimeToComplete());
+
+
+
+    }
 
 //    @Test
 //    public void testConstructorWithException() {
